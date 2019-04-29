@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<!--generator配置详解：https://blog.csdn.net/zhaoyachao123/article/details/78961737-->
+
+<generatorConfiguration>
+    <!--导入属性配置-->
+    <properties resource="generator.properties"/>
+    <!-- 数据库驱动包位置 -->
+    <classPathEntry location="${driverLocalhost}"/>
+    <context id="Mysql" defaultModelType="flat">
+        <!--覆盖生成XML文件 generator1.3.7版本-->
+        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"></plugin>
+        <!--注释-->
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/><!--是否取消注释-->
+            <property name="suppressDate" value="true"/><!--是否生成注释代时间戳-->
+        </commentGenerator>
+
+        <!-- 数据库链接URL、用户名、密码 -->
+        <jdbcConnection driverClass="${driver}"
+                        connectionURL="${url}"
+                        userId="${username}"
+                        password="${password}"/>
+        <!--类型转换-->
+        <javaTypeResolver>
+            <!--是否使用bigDecimal，false可自动转化以下类型(Long,Integer,Short,etc.)-->
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <!-- 生成模型的包名和位置
+             指定包名以及生成的目标地址(可以自定义地址,但是路径不存在不会自动创建 .使用MAVEN将默认生成在target目录下,会自动创建路径) -->
+        <javaModelGenerator targetPackage="${modelPackage}" targetProject="${modelProject}" />
+        <!-- 生成的映射文件包名和位置
+             指定包名以及生成的目标地址(可以自定义地址,但是路径不存在不会自动创建 .使用MAVEN将默认生成在target目录下,会自动创建路径) -->
+        <sqlMapGenerator targetPackage="${sqlPackage}" targetProject="${sqlProject}" />
+        <!--
+           生成dao的包名和位置
+           指定包名以及生成的目标地址(可以自定义地址,但是路径不存在不会自动创建 .使用MAVEN将默认生成在target目录下,会自动创建路径)
+         -->
+        <javaClientGenerator targetPackage="${mapperPackage}" targetProject="${mapperProject}" type="XMLMAPPER"/>
+
+        <!--如果需要通配所有表 tableName 直接用sql的通配符 %即可-->
+        <!--enableCountByExample（默认true）：MyBatis3Simple为false，指定是否生成动态查询总条数语句（用于分页的总条数查询）；-->
+        <!--enableUpdateByExample（默认true）：MyBatis3Simple为false，指定是否生成动态修改语句（只修改对象中不为空的属性）；-->
+        <!--enableDeleteByExample（默认true）：MyBatis3Simple为false，指定是否生成动态删除语句；-->
+        <!--enableSelectByExample（默认true）：MyBatis3Simple为false，指定是否生成动态查询语句；-->
+        <table schema="" tableName="%" enableCountByExample="false"
+                enableUpdateByExample="false" enableDeleteByExample="false"
+                enableSelectByExample="false" selectByExampleQueryId="false"/>
+
+    </context>
+
+</generatorConfiguration>

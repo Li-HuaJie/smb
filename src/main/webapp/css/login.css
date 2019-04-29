@@ -1,0 +1,8 @@
+body{
+    background-image: url(../image/login.jpg);
+}
+.card-footer{
+    padding: .75rem 7.25rem;
+    background-color: #fff;
+    border-top: 1px none;
+}
