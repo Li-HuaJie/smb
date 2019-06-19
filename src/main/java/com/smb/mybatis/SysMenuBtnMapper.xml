@@ -16,47 +16,61 @@
     from sys_menu_btn
     where id = #{id,jdbcType=INTEGER}
   </select>
+
+
+  <!-- ·················································· -->
+
+  <!-- 查询所有菜单按钮 -->
+  <select id="queryByAll" resultMap="BaseResultMap" parameterType="Object">
+    select <include refid="Base_Column_List" />
+    from sys_menu_btn where id = #{id}
+  </select>
+
+  <!--根据menuid查询 菜单按钮-->
+  <select id="queryByMenuid" resultMap="BaseResultMap" parameterType="Object">
+    select <include refid="Base_Column_List"/>
+    from sys_menu_btn where menuid = #{menuid}
+  </select>
+
+  <!--根据menuUrl查询 菜单按钮-->
+  <select id="queryByMenuUrl" resultMap="BaseResultMap" parameterType="Object">
+    select <include refid="Base_Column_List"/>
+    from sys_menu_btn b where EXISTS (
+      select 1 from sys_menu m where m.id = b.menuid AND IFNULL(m.state,0) = 0 AND m.url = #{url}
+    )
+  </select>
+
+  <!--删除记录-->
+  <delete id="deleteByMenuid" parameterType="Object">
+    deleet from sys_menu_btn where menuid = #{id}
+  </delete>
+
+  <!--根据用户id查询按钮-->
+  <select id="getMenuBtnByUser" resultMap="BaseResultMap" parameterType="Object">
+    SELECT DISTINCT * FROM sys_menu_btn b WHERE EXISTS (
+      SELECT * FROM sys_role_rel r
+      WHERE r.objId = b.id AND r.relType = 2
+      AND EXISTS (
+        SELECT 1 FROM sys_role_rel u WHERE u.roleId = r.roleId AND u.relType = 1 AND u.objId = #{userId}
+      )
+    )
+  </select>
+
+  <!-- ·················································· -->
+
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from sys_menu_btn
     where id = #{id,jdbcType=INTEGER}
   </delete>
+
   <insert id="insert" parameterType="com.smb.entity.SysMenuBtn">
     insert into sys_menu_btn (id, menuid, btnName, 
       btnType)
     values (#{id,jdbcType=INTEGER}, #{menuid,jdbcType=INTEGER}, #{btnname,jdbcType=VARCHAR}, 
       #{btntype,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.smb.entity.SysMenuBtn">
-    insert into sys_menu_btn
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="menuid != null">
-        menuid,
-      </if>
-      <if test="btnname != null">
-        btnName,
-      </if>
-      <if test="btntype != null">
-        btnType,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="menuid != null">
-        #{menuid,jdbcType=INTEGER},
-      </if>
-      <if test="btnname != null">
-        #{btnname,jdbcType=VARCHAR},
-      </if>
-      <if test="btntype != null">
-        #{btntype,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
+
   <update id="updateByPrimaryKeySelective" parameterType="com.smb.entity.SysMenuBtn">
     update sys_menu_btn
     <set>
@@ -72,6 +86,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
+
   <update id="updateByPrimaryKey" parameterType="com.smb.entity.SysMenuBtn">
     update sys_menu_btn
     set menuid = #{menuid,jdbcType=INTEGER},
@@ -79,4 +94,5 @@
       btnType = #{btntype,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
 </mapper>

@@ -2,16 +2,20 @@ package com.smb.mapper;
 
 import com.smb.entity.SysMenuBtn;
 
-public interface SysMenuBtnMapper {
-    int deleteByPrimaryKey(Integer id);
+import java.util.List;
+
+public interface SysMenuBtnMapper<T> extends BaseMapper<T> {
 
     int insert(SysMenuBtn record);
 
-    int insertSelective(SysMenuBtn record);
+    public List<T> queryByMenuid(Integer menuid);
 
-    SysMenuBtn selectByPrimaryKey(Integer id);
+    public List<T> queryByMenuUrl(String url);
 
-    int updateByPrimaryKeySelective(SysMenuBtn record);
+    public void deleteByMenuid(Integer menuid);
 
-    int updateByPrimaryKey(SysMenuBtn record);
+    public List<T> getMenuBtnByUser(Integer userid);
+
+    public List<T> queryByAll();
+
 }

@@ -39,7 +39,7 @@
 
     <!--HandlerMapping无需配置，springmvc可以默认启动（静态资源访问）-->
     <mvc:resources mapping="/css/**" location="/css/"/>
-    <mvc:resources mapping="/jquery-easyui-1.7.0/**" location="/js/jquery-easyui-1.7.0/"/>
+    <!--<mvc:resources mapping="/jquery-easyui-1.7.0/**" location="/js/jquery-easyui-1.7.0/"/>-->
     <mvc:resources mapping="/js/**" location="/js/"/>
     <mvc:resources mapping="/image/**" location="/image/"/>
 

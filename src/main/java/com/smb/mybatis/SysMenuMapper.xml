@@ -11,19 +11,83 @@
     <result column="updateTime" jdbcType="TIMESTAMP" property="updatetime" />
     <result column="rank" jdbcType="INTEGER" property="rank" />
   </resultMap>
+
+  <!-- 扩展字段 -->
+  <resultMap id="ExtResultMap" extends="BaseResultMap" type="com.smb.entity.SysMenu">
+    <result column="subCount" property="subCount"/>
+  </resultMap>
+
   <sql id="Base_Column_List">
     id, name, url, parentId, state, createTime, updateTime, rank
   </sql>
+
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from sys_menu
     where id = #{id,jdbcType=INTEGER}
   </select>
+
+  <!-- ·················································· -->
+
+  <!--查询所有有效系统菜单类表-->
+  <select id="queryByAll" resultMap="BaseResultMap" parameterType="Object">
+    select id,name,url,parentId from sys_menu where state = 0 order by rank desc
+  </select>
+
+  <!--获取顶级菜单-->
+  <select id="getRootMenu" resultMap="BaseResultMap" parameterType="Object">
+    select id,name,url,parentId from sys_menu where state = 0 and parentId is null
+    <if test="menuId != null">
+      and id != #{menuId}
+    </if>
+  </select>
+
+  <!--获取子菜单-->
+  <select id="getChildMenu" resultMap="BaseResultMap" parameterType="Object">
+    select id,name,url,parentId from sys_menu where state = 0 and parentId IS NOT NULL
+  </select>
+
+  <!--select根据角色ID获取菜单（不需要父菜单）-->
+  <select id="getMenuByRoleId" resultMap="BaseResultMap" parameterType="Object">
+    select id,name,url,parentId from sys_menu m where state = 0 and parentId is NOT NULL
+    AND EXISTS (
+      SELECT * FROM sys_role_rel r WHERE r.objId = m.id AND r.relType = 0
+      AND r.roleId = #{roleId}
+    )
+  </select>
+
+  <!--根据用户id查询父菜单菜单-->
+  <select id="getRootMenuByUser" resultMap="BaseResultMap" parameterType="Object">
+    select distinct id,name,url,parentId from sys_menu m where state = 0 and parentId is null
+    and exists (
+      SELECT *FROM sys_role_rel r
+      WHERE r.objId = m.id AND r.relType = 0
+      AND EXISTS (
+        SELECT 1 FROM sys_role_rel u WHERE u.roleId = r.roleId AND u.relType = 1 AND u.objId = #{userId}
+      )
+    )
+  </select>
+
+  <!--根据用户id查询子菜单菜单-->
+  <select id="getChildMenuByUser" resultMap="BaseResultMap" parameterType="Object">
+    select DISTINCT id,name,url,parentId from sys_menu m where state = 0 and parentId is not null
+    AND EXISTS (
+      SELECT * FROM sys_role_rel r
+      WHERE r.objId = m.id AND r.relType = 0
+      AND EXISTS (
+        SELECT 1 FROM sys_role_rel u WHERE u.roleId = r.roleId AND u.relType = 1 AND u.objId = #{userId}
+      )
+    )
+  </select>
+
+  <!-- ·················································· -->
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from sys_menu
     where id = #{id,jdbcType=INTEGER}
   </delete>
+
   <insert id="insert" parameterType="com.smb.entity.SysMenu">
     insert into sys_menu (id, name, url, 
       parentId, state, createTime, 
@@ -32,6 +96,7 @@
       #{parentid,jdbcType=INTEGER}, #{state,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, 
       #{updatetime,jdbcType=TIMESTAMP}, #{rank,jdbcType=INTEGER})
   </insert>
+
   <insert id="insertSelective" parameterType="com.smb.entity.SysMenu">
     insert into sys_menu
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -87,6 +152,7 @@
       </if>
     </trim>
   </insert>
+
   <update id="updateByPrimaryKeySelective" parameterType="com.smb.entity.SysMenu">
     update sys_menu
     <set>
@@ -114,6 +180,7 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
+
   <update id="updateByPrimaryKey" parameterType="com.smb.entity.SysMenu">
     update sys_menu
     set name = #{name,jdbcType=VARCHAR},
@@ -125,4 +192,5 @@
       rank = #{rank,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
 </mapper>

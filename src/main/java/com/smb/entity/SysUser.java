@@ -3,25 +3,25 @@ package com.smb.entity;
 import java.util.Date;
 
 public class SysUser extends Base {
-    private Integer id;
+    private Integer id;//主键
 
-    private String username;
+    private String username;//账号
 
-    private String pwd;
+    private String pwd;//密码
 
-    private String nickname;
+    private String nickname;//昵称
 
-    private Integer state;
+    private Integer state;//状态 0=可用，1=不可用
 
-    private Integer logincount;
+    private Integer logincount;//登录次数
 
-    private Date logintime;
+    private Date logintime;//最后登录时间
 
-    private Date createtime;
+    private Date createtime;//创建时间
 
-    private Date updatetime;
+    private Date updatetime;//修改时间
 
-    private Integer superadmin;
+    private Integer superadmin;//超级管理员 0=不是，1=是
 
     public Integer getId() {
         return id;
@@ -102,4 +102,27 @@ public class SysUser extends Base {
     public void setSuperadmin(Integer superadmin) {
         this.superadmin = superadmin;
     }
+
+    /**
+    * 超级管理员常量
+    */
+    public static enum SuperAdmin{
+        NO(0, "否"),YES(1, "是");
+        public int key;
+        public String value;
+        private SuperAdmin(int key,String value){
+            this.key = key;
+            this.value = value;
+        }
+        public static SuperAdmin get(int key){
+            SuperAdmin[] values = SuperAdmin.values();
+            for (SuperAdmin object : values){
+                if(object.key == key){
+                    return object;
+                }
+            }
+            return null;
+        }
+    }
+
 }

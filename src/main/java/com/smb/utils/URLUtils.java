@@ -1,9 +1,8 @@
 package com.smb.utils;
 
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ResourceBundle;
+import org.apache.commons.lang.StringUtils;
+
+import java.util.*;
 
 public class URLUtils {
 
@@ -30,6 +29,28 @@ public class URLUtils {
 
     public static String get(String key){
         return res.getString(key);
+    }
+
+    /**
+     * 组装按钮下URL
+     * @param menuUrl
+     * @param actionUrls
+     * @return
+     */
+    public static void getBtnAccessUrls(String menuUrl, String actionUrls, List<String> accessUrls) {
+        if (menuUrl == null || actionUrls == null || accessUrls == null) {
+            return;
+        }
+        String url = "save.do| action.do |/user/manger/abcd.do";
+        String[] actions = StringUtils.split(actionUrls, "|");
+        String menuUri = StringUtils.substringBeforeLast(menuUrl, "/");
+        for (String action : actions) {
+            action = StringUtils.trim(action);
+            if (StringUtils.startsWith(action, "/"))
+                accessUrls.add(action);
+            else
+                accessUrls.add(menuUri + "/" + action);
+        }
     }
 
 }

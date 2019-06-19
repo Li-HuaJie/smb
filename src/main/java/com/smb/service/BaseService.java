@@ -7,7 +7,7 @@ import com.smb.mapper.BaseMapper;
 
 public abstract class BaseService<T>{
 	
-	public abstract BaseMapper<T> getMapper();
+	public abstract BaseMapper<T>   getMapper();
 
 	
 	public void add(T t)  throws Exception{

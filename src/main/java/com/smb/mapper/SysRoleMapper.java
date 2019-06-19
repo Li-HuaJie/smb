@@ -2,16 +2,23 @@ package com.smb.mapper;
 
 import com.smb.entity.SysRole;
 
-public interface SysRoleMapper {
-    int deleteByPrimaryKey(Integer id);
+import java.util.List;
+
+public interface SysRoleMapper<T> extends BaseMapper<T> {
 
     int insert(SysRole record);
 
-    int insertSelective(SysRole record);
+    /**
+     * 查询全部有效的权限
+     * @return
+     */
+    public List<T> queryAllList();
 
-    SysRole selectByPrimaryKey(Integer id);
+    /**
+     * 根据用户ID查询权限
+     * @param userid
+     * @return
+     */
+    public List<T> queryByUserid(Integer userid);
 
-    int updateByPrimaryKeySelective(SysRole record);
-
-    int updateByPrimaryKey(SysRole record);
 }

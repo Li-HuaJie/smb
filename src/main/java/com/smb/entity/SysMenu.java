@@ -1,23 +1,29 @@
 package com.smb.entity;
 
 import java.util.Date;
+import java.util.List;
 
 public class SysMenu extends Base{
-    private Integer id;
+    private Integer id;//主键
 
-    private String name;
+    private String name;//菜单名
 
-    private String url;
+    private String url;//系统url
 
-    private Integer parentid;
+    private Integer parentid;//父id 关联sys_menu.id
 
-    private Integer state;
+    private Integer state;//是否使用，0=可用，1=禁用
 
     private Date createtime;
 
     private Date updatetime;
 
-    private Integer rank;
+    private Integer rank;//排序
+
+    private int subCount;//子菜单总数
+
+    //菜单按钮
+    private List<SysMenuBtn> btns;
 
     public Integer getId() {
         return id;
@@ -81,5 +87,21 @@ public class SysMenu extends Base{
 
     public void setRank(Integer rank) {
         this.rank = rank;
+    }
+
+    public List<SysMenuBtn> getBtns() {
+        return btns;
+    }
+
+    public void setBtns(List<SysMenuBtn> btns) {
+        this.btns = btns;
+    }
+
+    public int getSubCount() {
+        return subCount;
+    }
+
+    public void setSubCount(int subCount) {
+        this.subCount = subCount;
     }
 }

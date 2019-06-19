@@ -15,6 +15,9 @@ CREATE TABLE `sys_user` (
 	`superAdmin` int(1) NOT NULL DEFAULT '0' COMMENT '是否超级管理员0=不是,1=是',
 	PRIMARY KEY (`id`)
 ) ENGINE = INNODB DEFAULT CHARSET = utf8;
+-- 超级管理员
+-- MD5 加密网址 ： http://tool.chinaz.com/tools/md5.aspx    解密 ： https://www.cmd5.com/
+insert into sys_user values (1,'admin','E10ADC3949BA59ABBE56E057F20F883E','boss',0,1,NOW(),NOW(),NOW(),1);
 
 -- 菜单
 DROP TABLE IF EXISTS `sys_menu`;
@@ -29,6 +32,18 @@ CREATE TABLE `sys_menu`(
 	`rank` int(11) NOT NULL DEFAULT '0' COMMENT '排序',
 	PRIMARY KEY (`id`)
 ) ENGINE = INNODB DEFAULT CHARSET = utf8;
+-- 菜单栏
+insert into sys_menu (id,name,url,parentId,state,createTime,updateTime,rank)
+VALUES (1,'系统管理','',null,0,NOW(),NOW(),1);
+INSERT INTO sys_menu (id,name,url,parentId,state,createTime,updateTime,rank)
+VALUES (2,'菜单管理','/sysMenu/menu',1,0,NOW(),NOW(),0);
+INSERT INTO sys_menu (id,name,url,parentId,state,createTime,updateTime,rank)
+VALUES (3,'操作员管理','/sysUser/list',1,0,NOW(),NOW(),0);
+INSERT INTO sys_menu (id,name,url,parentId,state,createTime,updateTime,rank)
+VALUES (4,'角色管理','/sysRole/role',1,0,NOW(),NOW(),0);
+INSERT INTO sys_menu (id,name,url,parentId,state,createTime,updateTime,rank)
+VALUES (5,'操作员授权','/sysUser/userRole',1,0,NOW(),NOW(),0);
+
 
 -- 菜单按钮
 DROP TABLE IF EXISTS `sys_menu_btn`;
@@ -51,12 +66,17 @@ CREATE TABLE `sys_role` (
 	`descr` VARCHAR(100) DEFAULT NULL COMMENT '角色描述',
 	PRIMARY KEY (`id`)
 ) ENGINE = INNODB DEFAULT CHARSET = utf8;
+-- 角色
+insert into sys_role (id,roleName,createTime,updateTime,state,descr)
+values (1,'系统管理员',NOW(),NOW(),0,NULL);
+insert into sys_role (id,roleName,createTime,updateTime,state,descr)
+values (2,'管理员',NOW(),NOW(),0,NULL);
 
 -- 角色权限
 DROP TABLE IF EXISTS `sys_role_rel`;
 CREATE TABLE `sys_role_rel` (
 	`roleId` int(11) NOT NULL COMMENT '角色主键 sys_role.id',
-	`objId` int(11) not NULL COMMENT '关联主键 type=0管理sys_menu.id,type=1关联sys_user.id',
+	`objId` int(11) NOT NULL COMMENT '关联主键 type=0管理sys_menu.id,type=1关联sys_user.id',
 	`relType` int(1) DEFAULT NULL COMMENT '关联类型 0=菜单 1=用户'
 )ENGINE = INNODB DEFAULT CHARSET = utf8;
 

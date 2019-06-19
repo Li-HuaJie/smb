@@ -30,6 +30,8 @@ public class MethodUtil{
 	}
 	
 	/**
+	 * 加密网址 ： http://tool.chinaz.com/tools/md5.aspx
+	 * 解密 ： https://www.cmd5.com/
 	 *  MD5 加密  
 	 * 
 	 */
@@ -43,6 +45,7 @@ public class MethodUtil{
 	
 	
 	/**
+	 *
 	 * MD5 比较 匹配origin 加密后是否等于md5
 	 * @param origin 密码， 未加密
 	 * @param md5 已加密字符串
